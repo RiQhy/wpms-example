@@ -6,17 +6,19 @@ import {mediaUrl} from '../utils/appConfig';
 const Single = ({navigation, route}) => {
   console.log('route params', route.params);
   const singleMedia = route.params;
-  //TODO: Show image and all metadata, fix styling
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{fontSize: 40}}>{singleMedia.title}</Text>
+      <Text style={{fontSize: 40, fontStyle: 'italic'}}>
+        {singleMedia.title}
+      </Text>
       <Image
-        style={{width: '100%', resizeMode: 'contain', height: '100%'}}
+        style={{width: '100%', resizeMode: 'contain', height: '80%'}}
         source={{
           uri: mediaUrl + singleMedia.filename,
         }}
       />
       <Text style={{fontSize: 20}}>{singleMedia.description}</Text>
+      <Text style={{fontSize: 20}}>{singleMedia.mime_type}</Text>
     </SafeAreaView>
   );
 };
