@@ -26,4 +26,22 @@ const useMedia = () => {
   return {mediaArray};
 };
 
-export {useMedia};
+const useAuthentication = () => {
+  const postLogin = async (user) => {
+    try {
+      console.log('hey', apiUrl + 'login');
+      return await doFetch(apiUrl + 'login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+    } catch (error) {
+      console.error('postLogin error', error);
+    }
+  };
+  return {postLogin};
+};
+
+export {useMedia, useAuthentication};
