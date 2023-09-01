@@ -1,14 +1,14 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAuthentication, useUser} from '../hooks/ApiHooks';
+import {useUser} from '../hooks/ApiHooks';
+import LoginForm from '../components/LoginForm';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
-  const {setIsLoggedIn} = useContext(MainContext);
-  const {postLogin} = useAuthentication();
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
 
   const checkToken = async () => {
@@ -17,6 +17,7 @@ const Login = ({navigation}) => {
       const userData = await getUserByToken(token);
       if (userData) {
         setIsLoggedIn(true);
+        setUser(userData);
       }
     } catch (error) {
       console.error(error);
@@ -27,25 +28,10 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-  const logIn = async () => {
-    console.log('Login button pressed');
-    try {
-      const loginResponse = await postLogin({
-        username: 'rikuno',
-        password: 'Str33t',
-      });
-      console.log('login response', loginResponse);
-      await AsyncStorage.setItem('userToken', loginResponse.token);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error(error);
-      // TODO: notify user about failed login?
-    }
-  };
   return (
     <View style={styles.container}>
       <Text>Login</Text>
-      <Button title="Sign in!" onPress={logIn} />
+      <LoginForm />
     </View>
   );
 };
