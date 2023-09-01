@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/appConfig';
 
 const Single = ({navigation, route}) => {
-  console.log('route params', route.params);
+  // console.log('route params', route.params);
   const singleMedia = route.params;
   return (
     <SafeAreaView style={styles.container}>
@@ -18,6 +18,9 @@ const Single = ({navigation, route}) => {
         }}
       />
       <Text style={{fontSize: 20}}>{singleMedia.description}</Text>
+      <Text style={{fontSize: 20}}>
+        {Math.round(singleMedia.filesize / 1024)} kB
+      </Text>
       <Text style={{fontSize: 20}}>{singleMedia.mime_type}</Text>
     </SafeAreaView>
   );
