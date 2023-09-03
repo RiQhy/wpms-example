@@ -27,8 +27,7 @@ const LoginForm = () => {
       setIsLoggedIn(true);
       setUser(loginResponse.user);
     } catch (error) {
-      console.error(error);
-      // TODO: notify user about failed login?
+      console.error('login failed', error);
     }
   };
 
