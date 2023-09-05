@@ -12,7 +12,7 @@ const Single = ({navigation, route}) => {
         {singleMedia.title}
       </Text>
       <Image
-        style={{width: '100%', resizeMode: 'contain', height: '80%'}}
+        style={{width: '100%', resizeMode: 'contain', height: '60%'}}
         source={{
           uri: mediaUrl + singleMedia.filename,
         }}

@@ -12,6 +12,7 @@ const doFetch = async (url, options = {}) => {
 
 // const formatDate = (date) => {
 //  date = new Date(date);
+// return `$date.getDate()`
 // };
 
 export {doFetch};
