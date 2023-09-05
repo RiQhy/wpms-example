@@ -7,6 +7,7 @@ import {MainContext} from '../contexts/MainContext';
 
 const RegisterForm = () => {
   const {postUser} = useUser();
+  const {user} = useContext(MainContext);
 
   const {
     control,
@@ -25,7 +26,7 @@ const RegisterForm = () => {
     try {
       const registerResponse = await postUser(userData);
       await AsyncStorage.setItem('userInformation', registerResponse.user);
-      postUser(registerResponse.user);
+      user(registerResponse.user);
     } catch (error) {
       console.error('Registering failed', error);
     }
