@@ -1,40 +1,49 @@
 import React from 'react';
-import {Image, Platform, SafeAreaView, StyleSheet, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/appConfig';
+import {Card, ListItem} from '@rneui/themed';
+import {formatDate} from '../utils/functions';
 
 const Single = ({navigation, route}) => {
   // console.log('route params', route.params);
-  const singleMedia = route.params;
+  const {
+    title,
+    description,
+    filename,
+    time_added: timeAdded,
+    user_id: userId,
+    filesize,
+  } = route.params;
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={{fontSize: 40, fontStyle: 'italic'}}>
-        {singleMedia.title}
-      </Text>
-      <Image
-        style={{width: '100%', resizeMode: 'contain', height: '60%'}}
+    <Card containerStyle={{backgroundColor: 'green'}}>
+      <Card.Title style={{fontSize: 40, fontStyle: 'italic'}}>
+        {title}
+      </Card.Title>
+      <Card.Image
+        size="large"
         source={{
-          uri: mediaUrl + singleMedia.filename,
+          uri: mediaUrl + filename,
         }}
+        resizeMode="center"
+        style={{height: 300}}
       />
-      <Text style={{fontSize: 20}}>{singleMedia.description}</Text>
-      <Text style={{fontSize: 20}}>
-        {Math.round(singleMedia.filesize / 1024)} kB
-      </Text>
-      <Text style={{fontSize: 20}}>{singleMedia.mime_type}</Text>
-    </SafeAreaView>
+      <ListItem>
+        <ListItem.Content backgroundColor="yellow">
+          <ListItem.Subtitle style={{fontSize: 20}}>
+            {description}
+          </ListItem.Subtitle>
+          <ListItem.Subtitle>
+            size: {Math.round(filesize / 1024)} kB
+          </ListItem.Subtitle>
+          <ListItem.Subtitle>user_id: {userId}</ListItem.Subtitle>
+          <ListItem.Subtitle>
+            Uploaded: {formatDate(timeAdded)}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Platform.OS === 'android' ? 30 : 0,
-    backgroundColor: 'green',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Single.propTypes = {
   navigation: PropTypes.object,

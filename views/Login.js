@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Card} from '@rneui/themed';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
@@ -30,23 +30,14 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Login</Text>
+    <Card>
+      <Card.Title>Login</Card.Title>
       <LoginForm />
-      <Text>Register</Text>
+      <Card.Title>Register</Card.Title>
       <RegisterForm />
-    </View>
+    </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Login.propTypes = {
   navigation: PropTypes.object,
