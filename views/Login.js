@@ -5,7 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Card} from '@rneui/themed';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+} from 'react-native';
 
 const Login = ({navigation}) => {
   // props is needed for navigation
@@ -21,7 +26,7 @@ const Login = ({navigation}) => {
         setUser(userData);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -30,12 +35,18 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <Card>
-      <Card.Title>Login</Card.Title>
-      <LoginForm />
-      <Card.Title>Register</Card.Title>
-      <RegisterForm />
-    </Card>
+    <TouchableOpacity
+      onPress={() => Keyboard.dismiss()}
+      style={{flex: 1}}
+      activeOpacity={1}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <LoginForm />
+        <RegisterForm />
+      </KeyboardAvoidingView>
+    </TouchableOpacity>
   );
 };
 

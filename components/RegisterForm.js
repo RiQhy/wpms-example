@@ -1,9 +1,9 @@
-import {View, Text, TextInput, Button} from 'react-native';
 import React, {useContext} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
+import {Button, Card, Input, Text} from '@rneui/themed';
 
 const RegisterForm = () => {
   const {postUser} = useUser();
@@ -33,14 +33,15 @@ const RegisterForm = () => {
   };
 
   return (
-    <View>
+    <Card>
+      <Card.Title>Register Form</Card.Title>
       <Controller
         control={control}
         rules={{
           required: true,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -58,7 +59,7 @@ const RegisterForm = () => {
           maxLength: 100,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="password"
             secureTextEntry
             onBlur={onBlur}
@@ -76,7 +77,7 @@ const RegisterForm = () => {
           maxLength: 100,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="email"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -94,7 +95,7 @@ const RegisterForm = () => {
           maxLength: 100,
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
+          <Input
             placeholder="full_name"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -106,7 +107,7 @@ const RegisterForm = () => {
       />
 
       <Button title="Submit" onPress={handleSubmit(Register)} />
-    </View>
+    </Card>
   );
 };
 

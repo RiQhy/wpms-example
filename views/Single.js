@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/appConfig';
-import {Card, ListItem} from '@rneui/themed';
+import {Card, ListItem, Text} from '@rneui/themed';
 import {formatDate} from '../utils/functions';
 
 const Single = ({navigation, route}) => {
@@ -29,16 +29,10 @@ const Single = ({navigation, route}) => {
       />
       <ListItem>
         <ListItem.Content backgroundColor="yellow">
-          <ListItem.Subtitle style={{fontSize: 20}}>
-            {description}
-          </ListItem.Subtitle>
-          <ListItem.Subtitle>
-            size: {Math.round(filesize / 1024)} kB
-          </ListItem.Subtitle>
-          <ListItem.Subtitle>user_id: {userId}</ListItem.Subtitle>
-          <ListItem.Subtitle>
-            Uploaded: {formatDate(timeAdded)}
-          </ListItem.Subtitle>
+          <Text style={{fontSize: 20}}>{description}</Text>
+          <Text>size: {Math.round(filesize / 1024)} kB</Text>
+          <Text>user_id: {userId}</Text>
+          <Text>Uploaded: {formatDate(timeAdded)}</Text>
         </ListItem.Content>
       </ListItem>
     </Card>
