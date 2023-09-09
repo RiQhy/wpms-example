@@ -1,21 +1,22 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import {Button} from '@rneui/base';
 
 const Login = ({navigation}) => {
-  // props is needed for navigation
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
+  const [toggleRegister, setToggleRegister] = useState(false);
 
   const checkToken = async () => {
     try {
@@ -26,7 +27,7 @@ const Login = ({navigation}) => {
         setUser(userData);
       }
     } catch (error) {
-      console.log(error);
+      console.log('checkToken', error);
     }
   };
 
@@ -43,8 +44,18 @@ const Login = ({navigation}) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <LoginForm />
-        <RegisterForm />
+        {toggleRegister ? (
+          <RegisterForm setToggleRegister={setToggleRegister} />
+        ) : (
+          <LoginForm />
+        )}
+        <Button
+          onPress={() => {
+            setToggleRegister(!toggleRegister);
+          }}
+        >
+          {toggleRegister ? 'Login' : 'Register'}
+        </Button>
       </KeyboardAvoidingView>
     </TouchableOpacity>
   );
