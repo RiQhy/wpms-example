@@ -5,7 +5,7 @@ import {Button, Card, Input} from '@rneui/themed';
 import {Alert} from 'react-native';
 import {PropTypes} from 'prop-types';
 
-const RegisterForm = (setToggleRegister) => {
+const RegisterForm = ({setToggleRegister}) => {
   const {postUser, checkUsername} = useUser();
 
   const {
@@ -23,7 +23,7 @@ const RegisterForm = (setToggleRegister) => {
     mode: 'onBlur',
   });
 
-  const Register = async (registerData) => {
+  const register = async (registerData) => {
     try {
       delete registerData.confirm_password;
       const registerResponse = await postUser(registerData);
@@ -144,7 +144,7 @@ const RegisterForm = (setToggleRegister) => {
         name="full_name"
       />
 
-      <Button title="Submit" onPress={handleSubmit(Register)} />
+      <Button title="Submit" onPress={handleSubmit(register)} />
     </Card>
   );
 };

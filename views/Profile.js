@@ -5,7 +5,7 @@ import {useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/appConfig';
 import {Button, Card, Icon, ListItem} from '@rneui/themed';
 import {ScrollView} from 'react-native';
-import {ProfileForm} from '../components/ProfileForm';
+import ProfileForm from '../components/ProfileForm';
 
 const Profile = (props) => {
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
