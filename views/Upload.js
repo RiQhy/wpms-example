@@ -4,9 +4,14 @@ import {StyleSheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {useState} from 'react';
 import {placeholderImage} from '../utils/appConfig';
+import {Video} from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMedia} from '../hooks/ApiHooks';
 
 const Upload = () => {
+  const {postMedia} = useMedia();
   const [image, setImage] = useState(placeholderImage);
+  const [type, setType] = useState('image');
   const {
     control,
     handleSubmit,
@@ -20,6 +25,27 @@ const Upload = () => {
 
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
+    const formData = new FormData();
+    formData.append('title', uploadData.title);
+    formData.append('description', uploadData.description);
+
+    const filename = image.split('/').pop();
+    let fileExtension = filename.split('.').pop;
+    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
+
+    formData.append('file', {
+      uri: image,
+      name: filename,
+      type: `${type}/${fileExtension}`,
+    });
+
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await postMedia(formData, token);
+      console.log('load', response);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const pickImage = async () => {
@@ -31,16 +57,26 @@ const Upload = () => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      setType(result.assets[0].type);
     }
   };
 
   return (
     <Card>
-      <Card.Image
-        source={{uri: image}}
-        style={styles.image}
-        onPress={pickImage}
-      />
+      {type === 'image' ? (
+        <Card.Image
+          source={{uri: image}}
+          style={styles.image}
+          onPress={pickImage}
+        />
+      ) : (
+        <Video
+          source={{uri: image}}
+          style={styles.image}
+          useNativeControls={true}
+          resizeMode="cover"
+        />
+      )}
       <Controller
         control={control}
         rules={{
@@ -74,6 +110,8 @@ const Upload = () => {
         )}
         name="description"
       />
+
+      <Button title="Choose Media" onPress={pickImage} />
 
       <Button title="Submit" onPress={handleSubmit(upload)} />
     </Card>
