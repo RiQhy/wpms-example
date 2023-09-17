@@ -1,19 +1,24 @@
 import {Button, Card, Input} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import {useState} from 'react';
-import {placeholderImage} from '../utils/appConfig';
+import {useContext, useState} from 'react';
+import {appId, placeholderImage} from '../utils/appConfig';
 import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
+import {MainContext} from '../contexts/MainContext';
+import PropTypes from 'prop-types';
 
-const Upload = () => {
-  const {postMedia} = useMedia();
+const Upload = ({navigation}) => {
+  const {update, setUpdate} = useContext(MainContext);
+  const {postMedia, loading} = useMedia();
   const [image, setImage] = useState(placeholderImage);
   const [type, setType] = useState('image');
+  const {postTag} = useTag();
   const {
     control,
+    reset,
     handleSubmit,
     formState: {errors},
   } = useForm({
@@ -21,6 +26,7 @@ const Upload = () => {
       title: '',
       description: '',
     },
+    mode: 'onBlur',
   });
 
   const upload = async (uploadData) => {
@@ -43,9 +49,33 @@ const Upload = () => {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
       console.log('load', response);
+      const tagResponse = await postTag(
+        {
+          file_id: response.file_id,
+          tag: appId,
+        },
+        token,
+      );
+      console.log('postTag', tagResponse);
+      setUpdate(!update);
+      Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
+        {
+          text: 'Ok',
+          onPress: () => {
+            resetForm();
+            navigation.navigate('Home');
+          },
+        },
+      ]);
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const resetForm = () => {
+    setImage(placeholderImage);
+    setType('image');
+    reset();
   };
 
   const pickImage = async () => {
@@ -101,7 +131,7 @@ const Upload = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
-            placeholder="description"
+            placeholder="description (optional)"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -112,8 +142,15 @@ const Upload = () => {
       />
 
       <Button title="Choose Media" onPress={pickImage} />
-
-      <Button title="Submit" onPress={handleSubmit(upload)} />
+      <Button title="Reset" color={'error'} onPress={resetForm} />
+      <Button
+        loading={loading}
+        disabled={
+          image == placeholderImage || errors.description || errors.title
+        }
+        title="Upload"
+        onPress={handleSubmit(upload)}
+      />
     </Card>
   );
 };
@@ -121,11 +158,15 @@ const Upload = () => {
 const styles = StyleSheet.create({
   image: {
     width: '100%',
-    heihgt: undefined,
+    height: undefined,
     aspectRatio: 1,
     marginBottom: 15,
     resizeMode: 'contain',
   },
 });
+
+Upload.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default Upload;
