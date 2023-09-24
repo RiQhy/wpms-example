@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {SafeAreaView} from 'react-native';
 import List from '../components/List';
 
-const Home = (props) => {
-  return (
-    <SafeAreaView>
-      <List navigation={props.navigation} />
-    </SafeAreaView>
-  );
+const Home = ({navigation}) => {
+  return <List navigation={navigation} />;
 };
 
 Home.propTypes = {
